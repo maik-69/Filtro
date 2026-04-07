@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MindAR Face - Ajuste de Carita</title>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-face-aframe.prod.js"></script>
+    <style>
+      body { margin: 0; overflow: hidden; }
+    </style>
+  </head>
+  <body>
+
+    <a-scene 
+      mindar-face="userFill: false; uiScanning: no; filterMinCF:0.001; filterBeta: 0.1;" 
+      embedded 
+      color-space="sRGB" 
+      renderer="colorManagement: true, physicallyCorrectLights" 
+      vr-mode-ui="enabled: false" 
+      device-orientation-permission-ui="enabled: false">
+      
+      <a-assets>
+        <a-asset-item id="gafasModel" src="./ojos.glb"></a-asset-item>
+        <a-asset-item id="bigoteModel" src="./boca.glb"></a-asset-item>
+      </a-assets>
+
+      <a-camera active="false" position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <a-entity mindar-face-target="anchorIndex: 168">
+        <a-gltf-model 
+          src="#gafasModel" 
+          rotation="0 0 0" 
+          position="0 -0.05 0"  scale="0.5 0.5 0.5">
+        </a-gltf-model>
+      </a-entity>
+
+      <a-entity mindar-face-target="anchorIndex: 2">
+        <a-gltf-model 
+          src="#bigoteModel" 
+          rotation="-90 0 0" 
+          position="0 -0.1 0"   scale="0.3 0.3 0.3">
+        </a-gltf-model>
+      </a-entity>
+    </a-scene>
+
+    <script>
+      // Script para forzar la cámara trasera
+      document.addEventListener("DOMContentLoaded", () => {
+        const sceneEl = document.querySelector('a-scene');
+        sceneEl.addEventListener('viewready', () => {
+          const controller = sceneEl.systems["mindar-face-system"].controller;
+          controller.videoConfig = {
+            facingMode: 'environment',
+            mirrored: false
+          };
+        });
+      });
+    </script>
+  </body>
+</html>
